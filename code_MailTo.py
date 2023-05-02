@@ -24,4 +24,7 @@ for info in messages:
             print("subj:", mess["subject"])
             print("from:", mess["from"])
             print("body:")
-  
+            for i in mess['from']:
+                mail = mess['from']
+                po = mail.split() #decompose le text par mot dans une liste
+            print(po[2]) #affiche les mails
