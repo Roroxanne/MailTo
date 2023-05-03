@@ -25,6 +25,9 @@ for info in messages:
             print("from:", mess["from"])
             print("body:")
             for i in mess['from']:
-                mail = mess['from']
-                po = mail.split() #decompose le text par mot dans une liste
-            print(po[2]) #affiche les mails
+                ligne = mess['from']
+                text = ligne.split() #sépare le texte par mot dans une liste
+                prenom = text[0] #prend le premier élément de la liste qui est le Prénom
+                nom = text[1] #prend le nom
+                adresse= text[2] #prend l'adresse
+            # print(f"[{prenom}, {nom}, {adresse}]") -> test pour voir si le code est bon et prend bien les mots
