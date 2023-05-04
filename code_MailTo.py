@@ -23,7 +23,9 @@ for info in messages:
             mess = email.message_from_bytes(response_part[1])
             print("subj:", mess["subject"])
             print("from:", mess["from"])
-            print("body:")
+            body = email.message_from_string(mess.as_string())
+            for payload in body.get_payload():
+                print('body:', body)
             for i in mess['from']:
                 ligne = mess['from']
                 text = ligne.split() #sépare le texte par mot dans une liste
