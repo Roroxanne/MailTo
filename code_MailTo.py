@@ -22,18 +22,16 @@ for info in messages:
     for response_part in info:
         if type(response_part) is tuple:
             mess = email.message_from_bytes(response_part[1])
-            print("subj:", mess["subject"])
-            print("from:", mess["from"])
+            print("subj:", mess["subject"]) #print l'objet
+            print("from:", mess["from"]) #print par qui
             body = email.message_from_string(mess.as_string())
             for payload in body.get_payload():
-                print('body:', body)
+                if payload.get_content_type() == 'text/plain': #affichera juste le message
+                    print(payload.get_payload())
             for i in mess['from']:
-                ligne = mess['from']
-                text = ligne.split() #sépare le texte par mot dans une liste
-                prenom = text[0] #prend le premier élément de la liste qui est le Prénom
-                nom = text[1] #prend le nom
-                adresse= text[2] #prend l'adresse
-            # print(f"[{prenom}, {nom}, {adresse}]") -> test pour voir si le code est bon et prend bien les mots
+                mail = mess['from']
+                text = mail.split() #décompose le texte par mot, dans une liste
+            print(text[2])
 
 with open("table.csv", "w", encoding="UTF8") as fichier: #création du fichier csv
     writer = csv.writer(fichier)
