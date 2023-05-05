@@ -1,5 +1,6 @@
 import imaplib
 import email
+import csv
 
 mail = imaplib.IMAP4_SSL("imap.gmail.com")
 mail.login("roro.enzo.test@gmail.com","pnrbwptkjsvevasv") #se connecter
@@ -33,3 +34,6 @@ for info in messages:
                 nom = text[1] #prend le nom
                 adresse= text[2] #prend l'adresse
             # print(f"[{prenom}, {nom}, {adresse}]") -> test pour voir si le code est bon et prend bien les mots
+
+with open("table.csv", "w", encoding="UTF8") as fichier: #création du fichier csv
+    writer = csv.writer(fichier)
