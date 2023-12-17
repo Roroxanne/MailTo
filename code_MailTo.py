@@ -1,27 +1,63 @@
-import imaplib
-import email
+from simplegmail import Gmail 
+import pandas as pd
 
-mail = imaplib.IMAP4_SSL("imap.gmail.com")
-mail.login("roro.enzo.test@gmail.com","pnrbwptkjsvevasv") #se connecter
+gmail = Gmail()
 
-mail.select("Inbox") #acceder aux mail qu'on reçoit
+objet_recherche = gmail.get_messages(query="subject:(Question* OR Rattrapage* OR Devoir*")
 
-clé = "SUBJECT" #prendre comme clé FROM
-valeur = "Contact" # dans from prendre une adresse
-résultat, data = mail.search(None, clé, valeur) #va donc rechercher l'adresse
+data = {
+    "Objet": [],
+    "le_mail": [],
+    "adresse_mail": [],
+    "receveur":[]
+}
 
-mail_id_list = data[0].split() #obtient les id des messages et les sépare
 
-messages = [] #creer liste pour mettre les infos
-for num in mail_id_list:
-    résultat, data = mail.fetch(num, "(RFC822)")
-    messages.append(data)
+for message in objet_recherche:
+    sender = message.sender
+    adresse = sender.split()
+    adresse_separee = adresse[2]
+    body = message.plain
+    objet_du_mail = message.subject
+    receveur = message.recipient
+    data["Objet"].append(objet_du_mail)
+    data["le_mail"].append(body)
+    data["adresse_mail"].append(adresse_separee)
+    data["receveur"].append(receveur)
 
-for info in messages:
-    for response_part in info:
-        if type(response_part) is tuple:
-            mess = email.message_from_bytes(response_part[1])
-            print("subj:", mess["subject"])
-            print("from:", mess["from"])
-            print("body:")
+objet_recherche2 = gmail.get_messages(query="subject:Contact")
+
+data2 = {
+    "Adresse": [],
+    "Nom": [],
+    "Prenom":[],
+    "Année":[],
+    "Lycée": []
+}
+
+
+for message in objet_recherche2:
+    sender = message.sender
+    adresse = sender.split()
+    adresse_separee = adresse[2]
+    body = message.plain
+    nom_split = body.split()
+    if len(nom_split)==4:
+        prenom, nom, annee, lycee = nom_split
+        data2["Adresse"].append(adresse_separee)
+        data2["Nom"].append(nom)
+        data2["Prenom"].append(prenom)
+        data2["Année"].append(annee)
+        data2["Lycée"].append(lycee)
+        
+
+dataframe_contact = pd.DataFrame(data2)
+df = pd.DataFrame(data)
+df['le_mail'] = df['le_mail'].str.replace('\r', '').str.replace('\n', '')
+print("DataFrame Mail",df)
+print("DataFrame Contact")
+print(dataframe_contact)
+
+
+
   
