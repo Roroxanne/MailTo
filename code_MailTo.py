@@ -54,9 +54,8 @@ for message in objet_recherche2:
 dataframe_contact = pd.DataFrame(data2)
 df = pd.DataFrame(data)
 df['le_mail'] = df['le_mail'].str.replace('\r', '').str.replace('\n', '')
-print("DataFrame Mail",df)
-print("DataFrame Contact")
-print(dataframe_contact)
+pd.display(df)
+pd.display(dataframe_contact)
 
 
 
